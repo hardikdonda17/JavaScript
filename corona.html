@@ -120,7 +120,7 @@
     <script>
         async function populate() {
 
-            const requestURL = 'summary.json';
+            const requestURL = 'https://api.covid19api.com/summary';
             const request = new Request(requestURL);
 
             const response = await fetch(request);
