@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Corona Updates</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <style type="text/css">
+
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <td scope="col" colspan="2">
+                            <h2>Global Data</h2>
+                        </td>
+                    </tr>
+                </thead>
+                <tbody id="global-wise">
+                </tbody>
+            </table>
+        </div>
+        <br>
+        <hr>
+        <br>
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <td scope="col" colspan="5">
+                            <h2>Countries Data</h2>
+                        </td>
+                        <td>
+                            <div id="filter-records"></div>
+                        </td>
+                        <td>
+                            <h5>Search :</h5>
+                        </td>
+                        <td>
+                            <form role="form">
+                                <div class="form-group">
+                                    <input type="input" class="form-control input-lg" id="txt-search" placeholder="Search">
+                                </div>
+                            </form>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Sr. No.</th>
+                        <th>Country Name</th>
+                        <th>New Confirmed</th>
+                        <th>New Deaths</th>
+                        <th>New Recovered</th>
+                        <th>Total Confirmed</th>
+                        <th>Total Deaths</th>
+                        <th>TotalRecovered</th>
+                    </tr>
+                </thead>
+                <tbody id="country-wise"></tbody>
+            </table>
+        </div>
+    </div>
+
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.min.js" integrity="sha384-skAcpIdS7UcVUC05LJ9Dxay8AXcDYfBJqt1CJ85S/CFujBsIzCIv+l9liuYLaMQ/" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+        var settings = {
+            "url": "https://api.covid19api.com/summary",
+            "method": "GET",
+            "timeout": 0,
+        };
+
+        $.ajax(settings).done(function(response) {
+            $.each(response.Global, function(key, value) {
+                $("#global-wise").append("<tr><td>" + key + "</td><td>" + value + "</td></tr>");
+            });
+
+
+            var sno = 1;
+            console.log(response.Countries.length);
+            console.log(response.Countries[1].Country);
+            $.each(response.Countries, function(key, value) {
+
+                $("#country-wise").append("<tr>" +
+                    "<td>" + sno + "</td>" +
+                    "<td>" + value.Country + "</td>" +
+                    "<td>" + value.NewConfirmed + "</td>" +
+                    "<td>" + value.NewDeaths + "</td>" +
+                    "<td>" + value.NewRecovered + "</td>" +
+                    "<td>" + value.TotalConfirmed + "</td>" +
+                    "<td>" + value.TotalDeaths + "</td>" +
+                    "<td>" + value.TotalRecovered + "</td>" +
+                    "</tr>");
+                sno = sno + 1;
+            });
+            $(document).on('keyup', '#txt-search', function() {
+                var searchField = $(this).val();
+                $("#country-wise").html("");
+                var record = 0;
+                var regex = new RegExp(searchField, "i");
+                for (var i = 0; i < response.Countries.length; i++) {
+                    if ((response.Countries[i].Country.search(regex) != -1)) {
+                        $("#country-wise").append("<tr>" +
+                            "<td>" + (i + 1) + "</td>" +
+                            "<td>" + response.Countries[i].Country + "</td>" +
+                            "<td>" + response.Countries[i].NewConfirmed + "</td>" +
+                            "<td>" + response.Countries[i].NewDeaths + "</td>" +
+                            "<td>" + response.Countries[i].NewRecovered + "</td>" +
+                            "<td>" + response.Countries[i].TotalConfirmed + "</td>" +
+                            "<td>" + response.Countries[i].TotalDeaths + "</td>" +
+                            "<td>" + response.Countries[i].TotalRecovered + "</td>" +
+                            "</tr>");
+                        record = record + 1;
+                    }
+                }
+                $("#filter-records").html("<h6>" + record + " Record Found</h6>");
+            });
+        });
+    </script>
+</body>
+
+</html>

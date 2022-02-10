@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Corona</title>
+</head>
+<style>
+    section {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        padding-top: 100px;
+    }
+    
+    div {
+        width: 20%;
+        padding: 15px;
+        background-color: aqua;
+        margin: 7px;
+    }
+    
+    p {
+        display: inline-block;
+    }
+    
+    table {
+        width: 100%;
+    }
+    
+    td {
+        font-size: 15px;
+    }
+    
+    td:nth-child(1) {
+        width: 40%;
+        display: inline-block;
+    }
+    
+    table tr {
+        position: relative;
+        padding: 5px;
+        width: 100%;
+        display: flex;
+    }
+    
+    table tr::after {
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 1px;
+        bottom: 0;
+        left: 0;
+        background-color: black;
+    }
+    
+    #global_data {
+        width: 100%;
+        font-size: 30px;
+    }
+    
+    .color_ind {
+        display: flex;
+        padding: 15px;
+        width: 100%;
+        justify-content: center;
+        align-items: center;
+        background-color: white;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 1;
+        margin: 0;
+        flex-wrap: wrap;
+        -webkit-box-shadow: 0 4px 6px -6px black;
+        -moz-box-shadow: 0 4px 6px -6px black;
+        box-shadow: 0 4px 6px -6px black;
+    }
+    
+    .color_ind .risk {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        margin-right: 10px;
+    }
+    
+    .color_ind .low_risk {
+        background-color: aqua;
+    }
+    
+    .color_ind .medium_risk {
+        background-color: yellow;
+        margin-left: 15px;
+    }
+    
+    .color_ind .high_risk {
+        background-color: red;
+        margin-left: 15px;
+    }
+</style>
+<header></header>
+
+<body>
+
+    <div class="color_ind">
+        <marquee id="global_data" scrollamount="10">
+
+        </marquee>
+        <span class="low_risk risk"></span> <span>Low Risk</span>
+        <span class="medium_risk risk"></span> <span>Medium Risk</span>
+        <span class="high_risk risk"></span> <span>High Risk</span>
+    </div>
+    <section>
+
+    </section>
+    <!-- <script src="main.js"></script> -->
+    <script>
+        async function populate() {
+
+            const requestURL = 'summary.json';
+            const request = new Request(requestURL);
+
+            const response = await fetch(request);
+            const coronaText = await response.text();
+
+            const corona = JSON.parse(coronaText);
+            listCountries(corona);
+        }
+
+        function listCountries(obj) {
+            const global_data = document.getElementById('global_data');
+            const global_data_obj = obj['Global'];
+            global_data.innerHTML = 'New Confirmed: ' + global_data_obj.NewConfirmed +
+                ', Total Confirmed: ' + global_data_obj.TotalConfirmed +
+                ', New Deaths: ' + global_data_obj.NewDeaths +
+                ', Total Deaths: ' + global_data_obj.TotalDeaths +
+                ', New Recovered: ' + global_data_obj.NewRecovered +
+                ', Total Recovered: ' + global_data_obj.TotalRecovered +
+                ', Date: ' + global_data_obj.Date;
+
+            const section = document.querySelector('section');
+            const Countries = obj['Countries'];
+            for (const covid of Countries) {
+                let List = document.createElement('div');
+                section.appendChild(List);
+                const listTable = document.createElement('table');
+                List.appendChild(listTable);
+                const tableHtml = '<tr>' +
+                    '<td>Country :</td>' +
+                    '<td>' + covid.Country + '</td>' +
+                    '</tr>' +
+                    '<tr>' +
+                    '<td>New Confirmed :</td>' +
+                    '<td>' + covid.NewConfirmed + '</td>' +
+                    '</tr>' +
+                    '<tr>' +
+                    '<td>Total Confirmed :</td>' +
+                    '<td>' + covid.TotalConfirmed + '</td>' +
+                    '</tr>' +
+                    '<tr>' +
+                    '<td>New Deaths :</td>' +
+                    '<td>' + covid.NewDeaths + '</td>' +
+                    '</tr>' +
+                    '<tr>' +
+                    '<td>Total Deaths :</td>' +
+                    '<td>' + covid.TotalDeaths + '</td>' +
+                    '</tr>' +
+                    '<tr>' +
+                    '<td>New Recovere :</td>' +
+                    '<td>' + covid.NewRecovered + '</td>' +
+                    '</tr>' +
+                    '<tr>' +
+                    '<td>Total Recovered :</td>' +
+                    '<td>' + covid.TotalRecovered + '</td>' +
+                    '</tr>';
+                listTable.innerHTML = tableHtml;
+                if (covid.NewConfirmed >= 1000) {
+                    List.style.backgroundColor = "red";
+                } else if (covid.NewConfirmed >= 500) {
+                    List.style.backgroundColor = "yellow";
+                }
+            }
+
+        }
+        populate();
+    </script>
+</body>
+
+</html>

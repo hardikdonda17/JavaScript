@@ -90,3 +90,21 @@ console.log('');
 colors.forEach((color, index) => {
     console.log(`Color at position ${index} is ${color}`);
 });
+console.log('');
+
+function Tune(song, artist) {
+    this.title = song;
+    this.artist = artist;
+    this.concat = function() {
+        return this.title + "-" + this.artist;
+    }
+}
+
+var happySong = new Array();
+happySong[0] = new Tune("Putting on the Ritz", "Ella Fitzgerald");
+happySong[1] = new Tune("Balle Balle te shava shava", "Shinchan");
+
+console.log(happySong[0].concat());
+console.log(happySong[1].concat());
+
+console.log('');
