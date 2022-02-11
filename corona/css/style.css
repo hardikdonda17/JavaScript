@@ -15,6 +15,7 @@ table {
 
 td {
     font-size: 15px;
+    color: #000;
 }
 
 td:nth-child(1) {
