@@ -108,3 +108,52 @@ console.log(happySong[0].concat());
 console.log(happySong[1].concat());
 
 console.log('');
+
+const array = [1, 0, null, ' ', false, 5, 6, 7, undefined, null, 0, 9, 10];
+
+for (let index = 0; index < array.length; index++) {
+    console.log(Number.isInteger(array[index]));
+    if (Number.isInteger(array[index])) {
+
+    } else {
+        array.splice(index, 1);
+    }
+}
+
+for (let index = 0; index < array.length; index++) {
+    const element = array[index];
+    console.log(element);
+}
+console.log(' ');
+
+const country = ['INDIA', 'UK', 'USA', 'HINDUSTAN'];
+var long_country = country[0];
+for (let index = 0; index < country.length; index++) {
+    let element = country[index];
+    if (element.length > long_country.length) {
+        long_country = element;
+    }
+}
+console.log(long_country);
+console.log(' ');
+
+let person = prompt('Enter number');
+var coins = [];
+while (person >= 1) {
+    if (person >= 10) {
+        coins.push(10);
+        person = person - 10;
+    } else if (person >= 5) {
+        coins.push(5);
+        person = person - 5;
+    } else if (person >= 2) {
+        coins.push(2);
+        person = person - 2;
+    } else if (person >= 1) {
+        coins.push(1);
+        person = person - 1;
+    }
+}
+for (let i = 0; i < coins.length; i++) {
+    console.log(coins[i]);
+}
