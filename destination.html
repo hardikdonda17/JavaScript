@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Destination</title>
+</head>
+
+
+<body>
+    <table id="myTable" border="1">
+        <tr>
+            <th>Sr. No.</th>
+            <th>Address</th>
+            <th>Distance</th>
+            <th>Duration</th>
+        </tr>
+    </table>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script>
+        async function populate() {
+
+            const requestURL = 'source-destination.json';
+            const request = new Request(requestURL);
+
+            const response = await fetch(request);
+            const destinationText = await response.text();
+
+            const Destination = JSON.parse(destinationText);
+            listCountries(Destination);
+        }
+
+        function listCountries(obj) {
+            const destination_addresses = obj['destination_addresses'];
+
+            const rows = obj['rows'];
+            // console.log();
+            // console.log(destination_addresses);
+            // console.log(rows);
+            $('table').prepend().append('From : ' + obj['origin_addresses'])
+            for (let i = 0; i < rows[0].elements.length; i++) {
+                var newRowContent = "<tr><td>" + i + "</td><td>" + destination_addresses[i] + "</td><td>" + rows[0].elements[i].distance.text + "</td><td>" + rows[0].elements[i].duration.text + "</td></tr>";
+
+                $("#myTable tbody").append(newRowContent);
+            }
+        }
+        populate();
+    </script>
+</body>
+
+</html>
