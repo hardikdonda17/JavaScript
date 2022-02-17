@@ -18,6 +18,7 @@
             <th>Duration</th>
         </tr>
     </table>
+    <button onclick="clone_table()">clone table</button>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <script>
         async function populate() {
@@ -39,12 +40,18 @@
             // console.log();
             // console.log(destination_addresses);
             // console.log(rows);
-            $('table').prepend().append('From : ' + obj['origin_addresses'])
+            $('table').prepend().append('From : ' + obj['origin_addresses']);
             for (let i = 0; i < rows[0].elements.length; i++) {
                 var newRowContent = "<tr><td>" + i + "</td><td>" + destination_addresses[i] + "</td><td>" + rows[0].elements[i].distance.text + "</td><td>" + rows[0].elements[i].duration.text + "</td></tr>";
 
                 $("#myTable tbody").append(newRowContent);
             }
+        }
+
+        function clone_table() {
+            const node = document.getElementById("myTable");
+            const clone = node.cloneNode(true);
+            document.querySelector("body").append(clone);
         }
         populate();
     </script>
